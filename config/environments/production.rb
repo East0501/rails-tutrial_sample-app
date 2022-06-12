@@ -120,23 +120,15 @@ Rails.application.configure do
 
 
   # gmail functionality
-  #deviseが認証用のURLなどを生成するのに必要になる（らしい）
-  config.action_mailer.default_url_options = {  :host => 'kanta-sample-app.herokuapp.com/' }
-  #送信方法を指定（この他に:sendmail/:file/:testなどがあります)
-  config.action_mailer.delivery_method = :smtp
-  #送信方法として:smtpを指定した場合は、このconfigを使って送信詳細の設定を行います
-  config.action_mailer.smtp_settings = {
-    #gmail利用時はaddress,domain,portは下記で固定
-    address:"smtp.gmail.com",
-    domain: 'gmail.com',
-    port:587,
-    #gmailのユーザアカウント（xxxx@gmail.com)※念のため、credentials.yml.enc行き
-    user_name: Rails.application.credentials.gmail[:user_name],
-    #gmail２段階認証回避のためにアプリケーションでの利用パスワードを取得、必ずcredentials.yml.endに設定を！！
-    password: Rails.application.credentials.gmail[:password],
-    #パスワードをBase64でエンコード
-    authentication: :login
-  }
+  config.action_mailer.delivery_method = :smtp   host = "kanta-sample-app.herokuapp.com"   
+config.action_mailer.default_url_options = { host: host, protocol: 'https' }   ActionMailer::Base.smtp_settings = {     
+:address => 'smtp.gmail.com', 
+:port => '587', 
+:authentication => :plain, 
+:user_name => ENV['GMAIL_USERNAME'],     
+:password => ENV['GMAIL_PASSWORD'],     
+:domain => 'gmail.com',    
+:enable_starttls_auto => true }
 
 
 end
